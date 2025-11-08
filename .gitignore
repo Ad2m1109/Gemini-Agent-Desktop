@@ -1,6 +1,32 @@
+# Python virtual environment
 venv/
+.venv/
+ENV/
+
+# Python cache files
 __pycache__/
-*.pyc
-.gemini-versions/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database files
 agent_data.db
+
+# Project-specific
+.gemini-versions/
+
+# Local development files
+.env
+.env.local
+*.log
 .DS_Store
