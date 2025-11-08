@@ -31,10 +31,14 @@ class MainWindow(QMainWindow):
         self.editor_chat_splitter = QSplitter(Qt.Horizontal)
         self.main_splitter.addWidget(self.editor_chat_splitter)
         
-        # Add code editor placeholder (middle panel)
-        # TODO: Replace with actual code editor implementation
-        self.code_editor = QWidget()  
+        # Add code editor (middle panel)
+        from ui.code_editor import CodeEditor
+        self.code_editor = CodeEditor()
         self.editor_chat_splitter.addWidget(self.code_editor)
+        
+        # Connect editor signals
+        self.code_editor.text_changed.connect(self.handle_editor_change)
+        self.code_editor.file_saved.connect(self.handle_file_saved)
         
         # Add chat widget (right panel)
         self.chat_widget = ChatWidget(self.agent_worker)
@@ -51,3 +55,15 @@ class MainWindow(QMainWindow):
         self.file_navigator.set_root_path(project_path)
         # TODO: Initialize database session
         # TODO: Load recent files in editor
+
+    def handle_editor_change(self):
+        """Handle changes in the code editor"""
+        # Update window title to indicate unsaved changes if a file is open
+        if getattr(self, 'code_editor', None) and self.code_editor.current_file:
+            self.setWindowTitle(f"Gemini Agent Desktop - *{self.code_editor.current_file}")
+
+    def handle_file_saved(self, file_path: str):
+        """Handle file save events"""
+        # Update window title to show the saved file
+        self.setWindowTitle(f"Gemini Agent Desktop - {file_path}")
+        # Future: refresh file navigator or update session state
